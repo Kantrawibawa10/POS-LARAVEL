@@ -153,12 +153,12 @@ const Sidebar = () => {
                 className="d-none d-xl-flex bg-white border-end vh-100 flex-column position-fixed pb-5"
                 style={{ width: 260, top: 0, left: 0, zIndex: 1030 }}
             >
-                <div className="px-4 py-3 border-bottom d-flex align-items-center gap-3">
+                <div className="px-3 py-3 border-bottom d-flex align-items-center gap-2">
                     <div
                         className="rounded-3 d-flex align-items-center justify-content-center text-white fw-bold"
                         style={{
-                            width: 42,
-                            height: 42,
+                            width: 32,
+                            height: 32,
                             background:
                                 "linear-gradient(135deg, #0d6efd, #6610f2)",
                         }}

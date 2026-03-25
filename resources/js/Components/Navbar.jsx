@@ -95,12 +95,12 @@ const NavbarBackend = () => {
                             <li>
                                 <hr className="dropdown-divider" />
                             </li>
-                            <li>
+                            {/* <li>
                                 <Link className="dropdown-item" href="/profile">
                                     <i className="bi bi-person me-2"></i>
                                     Profile
                                 </Link>
-                            </li>
+                            </li> */}
                             <li>
                                 <button
                                     className="dropdown-item text-danger"
