@@ -106,36 +106,42 @@ public function create()
     /* ================= DETAILS ================= */
     foreach ($request->products as $item) {
 
-        $product = Product::with('stockTotal')
-            ->findOrFail($item['product_id']);
+    $product = Product::with('stockTotal')
+        ->findOrFail($item['product_id']);
 
-        // ✅ SAFE NULL HANDLING
-        $systemQty = (int) optional($product->stockTotal)->total_stock ?? 0;
-        $physicalQty = (int) $item['physical_quantity'];
+    $stockTotal = $product->stockTotal;
 
-        /*
-            Sistem  Fisik  Selisih
-            8        6      -2
-        */
-        $difference = $physicalQty - $systemQty;
-
-        $detail = $stockOpname->details()
-            ->where('product_id', $product->id)
-            ->first();
-
-        if ($detail) {
-            $detail->update([
-                'physical_quantity'    => $physicalQty,
-                'quantity_difference' => $difference,
-            ]);
-        } else {
-            $stockOpname->details()->create([
-                'product_id'           => $product->id,
-                'physical_quantity'    => $physicalQty,
-                'quantity_difference' => $difference,
-            ]);
-        }
+    if (!$stockTotal) {
+        abort(500, "Stock total tidak ditemukan untuk product ID {$product->id}");
     }
+
+    $systemQty = (int) $stockTotal->total_stock;
+    $physicalQty = (int) $item['physical_quantity'];
+
+    $difference = $physicalQty - $systemQty;
+
+    $detail = $stockOpname->details()
+        ->where('product_id', $product->id)
+        ->first();
+
+    if ($detail) {
+
+        $detail->update([
+            'physical_quantity'    => $physicalQty,
+            'quantity_difference' => $difference,
+        ]);
+
+    } else {
+
+        $stockOpname->details()->create([
+            'product_id'           => $product->id,
+            'stock_total_id'       => $stockTotal->id,
+            'physical_quantity'    => $physicalQty,
+            'quantity_difference' => $difference,
+        ]);
+
+    }
+}
 
     return back()->with('success', 'Stock Opname Updated');
 }

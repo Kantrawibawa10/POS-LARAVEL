@@ -12,14 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stock_opnames', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('stock_total_id')
-          ->constrained()
-          ->cascadeOnDelete();
-    $table->date('opname_date');
-    $table->enum('status', ['pending', 'completed']);
-    $table->timestamps();
-});
+            $table->id();
+            $table->date('opname_date');
+            $table->enum('status', ['pending', 'completed'])
+                ->default('pending');
+            $table->timestamps();
+        });
 
     }
 

@@ -15,7 +15,7 @@
         "laravolt/indonesia": "^0.41.0",
         "midtrans/midtrans-php": "2.6",
         "milon/barcode": "^12.1",
-        "phpoffice/phpspreadsheet": "1.29",
+        "phpoffice/phpspreadsheet": "^1.29",
         "picqer/php-barcode-generator": "^3.2",
         "spatie/laravel-permission": "^6.24"
     },
