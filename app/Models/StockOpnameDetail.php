@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class StockOpnameDetail extends Model
+{
+    protected $fillable = [
+        'stock_opname_id',
+        'product_id',
+        'stock_total_id',
+        'physical_quantity',
+        'quantity_difference',
+        'stock_total_id',
+        'quantity_difference',
+    ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function stockTotal()
+    {
+        return $this->belongsTo(StockTotal::class);
+    }
+
+    public function stockOpname()
+    {
+        return $this->belongsTo(StockOpname::class);
+    }
+}
+
