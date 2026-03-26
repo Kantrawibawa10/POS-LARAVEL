@@ -5,6 +5,7 @@ import AdminLayout from "../../../Layouts/AdminLayout";
 import { usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 import { router } from "@inertiajs/react";
+import Select from "react-select";
 
 export default function StockOpnameEdit({ stockOpname, products }) {
     const isLocked = stockOpname.status === "completed";
@@ -19,7 +20,7 @@ export default function StockOpnameEdit({ stockOpname, products }) {
     });
 
     const [selectedProduct, setSelectedProduct] = useState("");
-    const [qty, setQty] = useState("");
+    const [qty, setQty] = useState(0);
 
     const { flash } = usePage().props;
 
@@ -105,25 +106,43 @@ export default function StockOpnameEdit({ stockOpname, products }) {
             <style>
                 {`
             .modern-input {
-                height:46px;
-                border-radius:12px;
-                border:1px solid #e5e7eb;
-                background:#fff;
-                transition:.2s;
+                height: 46px;
+                border-radius: 12px;
+                border: 1px solid #e5e7eb;
+                background: #ffffff;
+                transition: all .2s ease;
             }
 
-            .modern-input:focus{
-                border-color:#6366f1;
-                box-shadow:0 0 0 3px rgba(99,102,241,.15);
+            .modern-input:focus {
+                border-color: #6366f1;
+                box-shadow: 0 0 0 3px rgba(99,102,241,.15);
             }
 
-            .table-modern thead{
+            .table-modern thead {
                 background:#f9fafb;
             }
 
             .table-modern td,
-            .table-modern th{
-                vertical-align:middle;
+            .table-modern th {
+                vertical-align: middle;
+            }
+
+            .react-select__control {
+                border-radius: 12px !important;
+                border: 1px solid #e5e7eb !important;
+                min-height: 42px;
+                box-shadow: none !important;
+            }
+
+            .react-select__control--is-focused {
+                border-color: #6366f1 !important;
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+            }
+
+            .react-select__menu {
+                border-radius: 10px;
+                overflow: hidden;
+                font-size: 14px;
             }
         `}
             </style>
@@ -150,14 +169,13 @@ export default function StockOpnameEdit({ stockOpname, products }) {
                                     width: 48,
                                     height: 48,
                                     borderRadius: 14,
-                                    background:
-                                        "linear-gradient(135deg,#6366f1,#8b5cf6)",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
                                     boxShadow:
                                         "0 6px 16px rgba(99,102,241,.35)",
                                 }}
+                                className="bg-primary"
                             >
                                 <i className="bi bi-pencil-square text-white fs-5"></i>
                             </div>
@@ -235,28 +253,35 @@ export default function StockOpnameEdit({ stockOpname, products }) {
                                                 Product
                                             </label>
 
-                                            <select
-                                                className="form-select modern-input"
-                                                value={selectedProduct}
-                                                onChange={(e) =>
+                                            <Select
+                                                className="react-select-container"
+                                                classNamePrefix="react-select"
+                                                placeholder="Pilih Produk"
+                                                options={products.map((p) => ({
+                                                    value: p.id,
+                                                    label: p.name,
+                                                }))}
+                                                value={
+                                                    products
+                                                        .map((p) => ({
+                                                            value: p.id,
+                                                            label: p.name,
+                                                        }))
+                                                        .find(
+                                                            (opt) =>
+                                                                opt.value ===
+                                                                selectedProduct,
+                                                        ) || null
+                                                }
+                                                onChange={(selected) =>
                                                     setSelectedProduct(
-                                                        e.target.value,
+                                                        selected
+                                                            ? selected.value
+                                                            : "",
                                                     )
                                                 }
-                                            >
-                                                <option value="">
-                                                    Pilih Produk
-                                                </option>
-
-                                                {products.map((p) => (
-                                                    <option
-                                                        key={p.id}
-                                                        value={p.id}
-                                                    >
-                                                        {p.name}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                isClearable
+                                            />
                                         </div>
 
                                         <div className="col-md-4">
@@ -279,15 +304,14 @@ export default function StockOpnameEdit({ stockOpname, products }) {
                                             <button
                                                 type="button"
                                                 onClick={handleAddProduct}
-                                                className="btn text-white w-100"
+                                                className="btn text-white w-100 btn-primary"
                                                 style={{
                                                     height: 46,
                                                     borderRadius: 12,
-                                                    background:
-                                                        "linear-gradient(135deg,#22c55e,#16a34a)",
                                                     border: "none",
                                                 }}
                                             >
+                                                <i class="bi bi-plus-lg me-2"></i>
                                                 Tambah
                                             </button>
                                         </div>
@@ -411,19 +435,32 @@ export default function StockOpnameEdit({ stockOpname, products }) {
 
                             {/* ================= ACTION ================= */}
                             {!isLocked && (
-                                <div className="d-flex justify-content-end mt-5">
+                                <div className="d-flex justify-content-end mt-5 gap-2">
                                     <button
-                                        disabled={processing}
-                                        className="btn text-white px-4"
-                                        style={{
-                                            borderRadius: 12,
-                                            background:
-                                                "linear-gradient(135deg,#6366f1,#8b5cf6)",
-                                            border: "none",
-                                        }}
+                                        type="button"
+                                        className="btn btn-danger"
+                                        onClick={() => window.history.back()}
                                     >
-                                        <i className="fa fa-save me-2"></i>
-                                        Update Opname
+                                        <i class="bi bi-arrow-left me-2"></i>
+                                        Kembali
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        disabled={processing}
+                                    >
+                                        {processing ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2"></span>
+                                                Saving...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i class="bi bi-save me-2"></i>
+                                                Simpan Data
+                                            </>
+                                        )}
                                     </button>
                                 </div>
                             )}

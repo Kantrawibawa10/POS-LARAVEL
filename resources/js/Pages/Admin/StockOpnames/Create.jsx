@@ -373,7 +373,16 @@ export default function StockOpnameCreate() {
                             </div>
 
                             {/* ================= ACTION ================= */}
-                            <div className="d-flex justify-content-end gap-3 mt-5">
+                            <div className="d-flex justify-content-end gap-3 mt-5 gap-2">
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={() => window.history.back()}
+                                >
+                                    <i class="bi bi-arrow-left me-2"></i>
+                                    Kembali
+                                </button>
+
                                 <button
                                     type="submit"
                                     className="btn btn-primary"
